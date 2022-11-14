@@ -1,0 +1,32 @@
+version: "3.5"
+services:
+  postgres:
+    image: "postgres:12"
+    ports:
+    - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: mytunes2022
+    volumes:
+      - ./conf/postgres/initdb/:/docker-entrypoint-initdb.d/
+    networks:
+      - interdb
+  pgAdmin:
+    image: "dpage/pgadmin4:latest"
+    ports:
+      - "15432:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: mytunes@assuresoft.com
+      PGADMIN_DEFAULT_PASSWORD: mytunes2022
+      PGADMIN_SERVER_JSON_FILE: /pgadmin4/conf/server.json
+    volumes:
+      - ./conf/pgadmin/:/pgadmin4/conf/
+    networks:
+      - interdb
+networks:
+  default:
+    name: mytunes_default
+    driver: bridge
+  interdb:
+    name: mytunes_interdb
+    driver: bridge
+
